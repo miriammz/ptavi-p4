@@ -4,29 +4,32 @@
 Programa cliente que abre un socket a un servidor
 """
 
+import sys
 import socket
 
 # Cliente UDP simple.
 
 # Dirección IP del servidor.
-SERVER = 'localhost'
-PORT = 6001
+SERVER = sys.argv[1]
+PORT = int(sys.argv[2])
 
 # Contenido que vamos a enviar
-LINE = '¡Hola mundo!'
+LINE = sys.argv[3] 
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 my_socket.connect((SERVER, PORT))
 
-print "Enviando: " + LINE
+print "Enviado: " + LINE
 my_socket.send(LINE + '\r\n')
 data = my_socket.recv(1024)
 
 print 'Recibido -- ', data
-print "Terminando socket..."
+print "Terminado socket..."
 
 # Cerramos todo
 my_socket.close()
 print "Fin."
+
+# python client.py ip puerto linea (ej 127.0.0.1 5060 eco eco, soy yo)
