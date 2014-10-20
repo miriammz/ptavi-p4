@@ -9,15 +9,12 @@ import socket
 
 # Cliente UDP simple.
 
-# Dirección IP del servidor.
+# Parametros pasados por el teclado.
 SERVER = sys.argv[1]
 PORT = int(sys.argv[2])
 REGISTER = sys.argv[3]
 EMAIL = sys.argv[4]
 EXPIRES = sys.argv[5]
-
-# Contenido que vamos a enviar
-LINE = ""
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -41,5 +38,3 @@ print "Terminado socket..."
 # Cerramos todo
 my_socket.close()
 print "Fin."
-
-# python client.py ip puerto linea (ej 127.0.0.1 5060 register email@email.com expires)
