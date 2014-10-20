@@ -12,9 +12,9 @@ import socket
 # Dirección IP del servidor.
 SERVER = sys.argv[1]
 PORT = int(sys.argv[2])
-register = sys.argv[3]
-email = sys.argv[4]
-expires = int(sys.argv[5])
+REGISTER = sys.argv[3]
+EMAIL = sys.argv[4]
+EXPIRES = sys.argv[5]
 
 # Contenido que vamos a enviar
 LINE = ""
@@ -24,14 +24,13 @@ my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 my_socket.connect((SERVER, PORT))
 
-try:
-except UsageError:
-    print "Usage: client.py ip puerto register sip_addres expires_value
+if len(sys.argv) != 6:
+    print "Usage: client.py ip puerto register sip_addres expires_value"
     sys.exit()
 
-if register == "REGISTER":
-    LINE = "REGISTER sip:" + email + " " + "SIP/1.0\r\n"
-    LINE2 = "Expires: " + expires + "\r\n\r\n"
+if REGISTER == "REGISTER":
+    LINE = "REGISTER sip:" + EMAIL + " " + "SIP/1.0\r\n"
+    LINE2 = "Expires: " + EXPIRES + "\r\n\r\n"
     print "Enviamos: " + LINE + LINE2
 my_socket.send(LINE + LINE2 + "\r\n")
 data = my_socket.recv(1024)
@@ -43,4 +42,4 @@ print "Terminado socket..."
 my_socket.close()
 print "Fin."
 
-# python client.py ip puerto linea (ej 127.0.0.1 5060 register email@email.com)
+# python client.py ip puerto linea (ej 127.0.0.1 5060 register email@email.com expires)
