@@ -26,7 +26,7 @@ if len(sys.argv) != 6:
     sys.exit()
 
 if REGISTER == "REGISTER":
-    LINE = "REGISTER sip:" + EMAIL + " " + "SIP/1.0\r\n"
+    LINE = "REGISTER sip:" + EMAIL + " " + "SIP/2.0\r\n"
     LINE2 = "Expires: " + EXPIRES + "\r\n\r\n"
     print "Enviamos: " + LINE + LINE2
 my_socket.send(LINE + LINE2 + "\r\n")
