@@ -34,7 +34,7 @@ if REGISTER == "REGISTER":
     LINE = "REGISTER sip:" + EMAIL + " " + "SIP/2.0\r\n"
     LINE2 = "Expires: " + EXPIRES + "\r\n\r\n"
     print "Enviamos: " + LINE + LINE2
-my_socket.send(LINE + LINE2 + "\r\n")
+my_socket.send(LINE + LINE2)
 data = my_socket.recv(1024)
 
 print 'Recibido -- ', data
