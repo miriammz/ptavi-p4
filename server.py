@@ -22,8 +22,8 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         fich.write("User\tIP\tExpires\n")
         for cliente, valor in self.dicc.items():
             ip = valor.split(",")[0]
-            hora = time.strftime('%Y-­%m-­%d %H:%M:%S',
-                                  time.gmtime(time.time()))
+            time = time.gmtime(time.time())
+            hora = time.strftime('%Y-­%m-­%d %H:%M:%S', time)
             fich.write(cliente + '\t' + ip + '\t' + hora + '\n')
 
     """
@@ -45,6 +45,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         EXPIRES = line3[0]
         self.dicc[cliente] = IP
         tiempo = time.time() + int(EXPIRES)
+        hora_actual = time.time()
         while 1:
             if EXPIRES == '0':
                 if cliente in self.dicc:
@@ -55,18 +56,16 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                     break
             else:
                 self.dicc[cliente] = IP + ", " + str(tiempo)
-                for elemento, valor in self.dicc.items():
-                    hora = valor.split(",")[-1]
-                    hora_actual = time.time()
-                    print self.dicc
-                    if hora_actual > hora:
-                        del self.dicc[elemento]
-                        self.register2file()
                 self.register2file()
                 self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
                 break
             if not line or not line2:
                 break
+        for elemento, valor in self.dicc.items():
+            hora = valor.split(",")[-1]
+            if hora_actual > hora:
+                del self.dicc[elemento]
+                self.register2file()
 
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
