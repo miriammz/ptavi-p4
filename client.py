@@ -21,6 +21,11 @@ my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 my_socket.connect((SERVER, PORT))
 
+"""
+Comprobamos que pasamos por teclado el numero de argumentos correctos y
+enviamos al servidor nuestro email y el expires
+"""
+
 if len(sys.argv) != 6:
     print "Usage: client.py ip puerto register sip_addres expires_value"
     sys.exit()
