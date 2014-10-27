@@ -22,8 +22,8 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         fich.write("User\tIP\tExpires\n")
         for cliente, valor in self.dicc.items():
             ip = valor.split(",")[0]
-            time = time.gmtime(time.time())
-            hora = time.strftime('%Y-­%m-­%d %H:%M:%S', time)
+            hora = time.strftime('%Y-­%m-­%d %H:%M:%S',
+                            time.gmtime(time.time()))
             fich.write(cliente + '\t' + ip + '\t' + hora + '\n')
 
     """
