@@ -11,25 +11,30 @@ import time
 
 
 class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
+
     """
-    Echo server class
+    Funcion register: registramos el usuario con el email, la ip y la hora
     """
     dicc = {}
+
+    def register2file(self):
+        fich = open("registered.txt", "w")
+        fich.write("User\tIP\tExpires\n")
+        for cliente, valor in self.dicc.items():
+            ip = valor.split(",")[0]
+            hora = time.strftime('%Y-­%m-­%d %H:%M:%S',
+                                  time.gmtime(time.time()))
+            fich.write(cliente + '\t' + ip + '\t' + hora + '\n')
+
+    """
+    Funcion handle: leemos lo que nos envia el cliente y procesamos el expires
+    """
 
     def handle(self):
         # Escribe dirección y puerto del cliente (de tupla client_address)
         self.wfile.write("Hemos recibido tu peticion" + '\n')
-        fichero = open("fichero.txt", "w")
         IP = self.client_address[0]
         PUERTO = str(self.client_address[1])
-        fichero.write(IP + " " + str(PUERTO))
-        # register2file
-        def register2file():
-            fich = open("registered.txt", "w")
-            fich.write("User\tIP\tExpires\n")
-            expire = time.strftime('%Y-­%m-­%d %H:%M:%S',
-                             time.gmtime(time.time()))
-            fich.write(cliente + '\t' + IP + '\t' +  expire)
         # Leyendo línea a línea lo que nos envía el cliente
         line = self.rfile.read()
         print "El cliente nos manda " + line
@@ -39,7 +44,6 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         line3 = line[3].split("\r")
         EXPIRES = line3[0]
         self.dicc[cliente] = IP
-        hora_actual = time.time() 
         tiempo = time.time() + int(EXPIRES)
         while 1:
             if EXPIRES == '0':
@@ -47,24 +51,19 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                     self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
                     # borramos al usuario
                     del self.dicc[cliente]
-                    register2file()
+                    self.register2file()
                     break
-                #else:
-                    #self.wfile.write("SIP/2.0 410 Gone\r\n\r\n")
-                    #print "11111111111"
-                    #break
             else:
-                self.dicc[cliente] = [IP, tiempo]
-                print "hhhhhhhhh"
-                if hora_actual < tiempo:
-                    print hora_actual
-                    print "aaaaaaaaaaaaaa"
-                    print tiempo
-                    del self.dicc[cliente]
-                    register2file()
-                    self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
-                    print "3333333333333333"
+                self.dicc[cliente] = IP + ", " + str(tiempo)
+                for elemento, valor in self.dicc.items():
+                    hora = valor.split(",")[-1]
+                    hora_actual = time.time()
                     print self.dicc
+                    if hora_actual > hora:
+                        del self.dicc[elemento]
+                        self.register2file()
+                self.register2file()
+                self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
                 break
             if not line or not line2:
                 break
