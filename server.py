@@ -25,6 +25,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             hora = time.strftime('%Y-­%m-­%d %H:%M:%S',
                             time.gmtime(time.time()))
             fich.write(cliente + '\t' + ip + '\t' + hora + '\n')
+        fich.close()
 
     """
     Funcion handle: leemos lo que nos envia el cliente y procesamos el expires
